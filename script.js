@@ -20,20 +20,9 @@ setInterval(() => {
     character.style.top = `${characterTop + 3}px`;
   }
 
-  const blockLeft = parseInt(
-    window.getComputedStyle(block).getPropertyValue("left")
-  );
-  const holeTop = parseInt(
-    window.getComputedStyle(hole).getPropertyValue("top")
-  );
-  const inverseCharacterTop = -(500 - characterTop);
-
   if (
-    characterTop > 480 || // if character falls to the bottom
-    (blockLeft < 20 && // if block is at the left of the screen (meaning it touches the ball)
-      blockLeft > -50 &&
-      (inverseCharacterTop < holeTop || // if character doesn't touch hole
-        inverseCharacterTop > holeTop + 150 - 20)) // if character doesn't touch hole, 130 because though hole is 150px, character is 20px tall
+    characterTop > 480 || // 480 as character height is 20px and game window height is 500px
+    (isCollide(block, character) && !isCollide(hole, character))
   ) {
     alert("Game over. Score = " + counter);
     character.style.top = "100px";
@@ -64,3 +53,15 @@ document.onclick = () => {
     jumpCount++;
   }, 10);
 };
+
+function isCollide(a, b) {
+  const aRect = a.getBoundingClientRect();
+  const bRect = b.getBoundingClientRect();
+
+  return !(
+    aRect.top + aRect.height < bRect.top ||
+    aRect.top > bRect.top + bRect.height ||
+    aRect.left + aRect.width < bRect.left ||
+    aRect.left > bRect.left + bRect.width
+  );
+}
