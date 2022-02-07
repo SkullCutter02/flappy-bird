@@ -7,18 +7,20 @@
 #game {
   width: 400px;
   height: 500px;
-  border: 1px solid #000;
   margin: auto;
   overflow: hidden;
+  background: #0099cb;
+  position: relative;
 }
 
 #block {
   width: 50px;
   height: 500px;
-  background: #000;
+  background: green;
   position: relative;
   left: 400px;
-  animation: block 1s infinite linear;
+  animation: block 1.2s infinite linear;
+  animation-play-state: paused;
 }
 
 @keyframes block {
@@ -32,20 +34,24 @@
 }
 
 #hole {
-  background: white;
+  background: url("https://user-images.githubusercontent.com/18351809/46888871-624a3900-ce7f-11e8-808e-99fd90c8a3f4.png");
   height: 150px;
   width: 50px;
   position: relative;
   left: 400px;
   top: -500px;
-  animation: block 1s infinite linear;
+  animation: block 1.2s infinite linear;
+  animation-play-state: paused;
 }
 
 #character {
-  width: 20px;
-  height: 20px;
-  background: red;
+  width: 40px;
+  height: 40px;
+  background: url("https://www.pngkey.com/png/full/325-3257134_flappy-bird-flappy-bird-sprite-png.png");
+  background-size: contain;
+  background-repeat: no-repeat;
   position: absolute;
   top: 100px;
-  border-radius: 50%;
+  transform: rotatez(0);
+  transition: transform 0.2s ease-out;
 }
