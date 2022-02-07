@@ -1,22 +1,43 @@
+const game = document.getElementById("game");
 const block = document.getElementById("block");
 const hole = document.getElementById("hole");
 const character = document.getElementById("character");
+const resetBtn = document.getElementById("reset-btn");
+const score = document.getElementById("score");
 
 let isJumping = false;
+let isDead = false;
 let counter = 0;
 
-setTimeout(() => {
-  block.style.animationPlayState = "running";
-  hole.style.animationPlayState = "running";
-}, 2000);
+resetBtn.addEventListener("click", () => {
+  resetGame();
+});
+
+const rerunPipes = () => {
+  setTimeout(() => {
+    block.style.animation = null;
+    hole.style.animation = null;
+    block.style.animationPlayState = "running";
+    hole.style.animationPlayState = "running";
+  }, 2000);
+};
+
+const updateScore = () => {
+  score.innerText = counter;
+};
+
+rerunPipes();
 
 hole.addEventListener("animationiteration", () => {
   const random = -(Math.random() * 300 + 150); // return random number between -150 and -450
   hole.style.top = `${random}px`;
   counter++;
+  updateScore();
 });
 
-const game = setInterval(() => {
+setInterval(() => {
+  if (isDead) return;
+
   const characterTop = getCharacterTop();
 
   if (!isJumping) {
@@ -28,24 +49,27 @@ const game = setInterval(() => {
     characterTop > 480 || // 480 as character height is 20px and game window height is 500px
     (isCollide(block, character) && !isCollide(hole, character))
   ) {
-    // alert("Game over. Score = " + counter);
+    isDead = true;
 
     setTimeout(() => {
       const fall = setInterval(() => {
         const characterTop = getCharacterTop();
-        if (characterTop >= 480) clearInterval(fall);
+
+        // if reset button is pressed, isDead is set to false, and we don't want this to trigger when the game is reset
+        if (characterTop >= 480 || !isDead) clearInterval(fall);
+
         character.style.top = `${characterTop + 4}px`;
       }, 10);
     }, 600);
 
     block.style.animationPlayState = "paused";
     hole.style.animationPlayState = "paused";
-    counter = 0;
-    clearInterval(game);
   }
 }, 10);
 
-document.onclick = () => {
+game.addEventListener("click", () => {
+  if (isDead) return;
+
   isJumping = true;
 
   let jumpCount = 0;
@@ -68,16 +92,19 @@ document.onclick = () => {
 
     jumpCount++;
   }, 10);
-};
+});
 
 const getCharacterTop = () =>
   parseInt(window.getComputedStyle(character).getPropertyValue("top"));
 
 const resetGame = () => {
-  block.style.animation = "initial";
-  hole.style.animation = "initial";
-  block.style.animation = "block 1s infinite linear";
-  hole.style.animation = "block 1s infinite linear";
+  counter = 0;
+  updateScore();
+  isDead = false;
+  block.style.animation = "none";
+  hole.style.animation = "none";
+  character.style.top = "100px";
+  rerunPipes();
 };
 
 function isCollide(a, b) {

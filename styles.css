@@ -4,6 +4,16 @@
   box-sizing: border-box;
 }
 
+#reset-btn {
+  margin: 0 auto;
+  display: block;
+}
+
+.score {
+  margin: 30px 0;
+  text-align: center;
+}
+
 #game {
   width: 400px;
   height: 500px;
