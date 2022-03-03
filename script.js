@@ -13,7 +13,7 @@ resetBtn.addEventListener("click", () => {
   resetGame();
 });
 
-const rerunPipes = () => {
+const runPipes = () => {
   setTimeout(() => {
     block.style.animation = null;
     hole.style.animation = null;
@@ -26,7 +26,7 @@ const updateScore = () => {
   score.innerText = counter;
 };
 
-rerunPipes();
+runPipes();
 
 hole.addEventListener("animationiteration", () => {
   const random = -(Math.random() * 300 + 150); // return random number between -150 and -450
@@ -104,7 +104,7 @@ const resetGame = () => {
   block.style.animation = "none";
   hole.style.animation = "none";
   character.style.top = "100px";
-  rerunPipes();
+  runPipes();
 };
 
 function isCollide(a, b) {
